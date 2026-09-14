@@ -12,7 +12,10 @@
         <dependency>
             <groupId>com.zhihuan</groupId>
             <artifactId>zhihuan-product-api</artifactId>
-            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.zhihuan</groupId>
+            <artifactId>zhihuan-audit-api</artifactId>
         </dependency>
         <dependency>
             <groupId>com.zhihuan</groupId>

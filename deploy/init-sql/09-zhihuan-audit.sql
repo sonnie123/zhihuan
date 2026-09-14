@@ -72,3 +72,15 @@ CREATE TABLE IF NOT EXISTS `audit_manual_task` (
     KEY `idx_status` (`status`),
     KEY `idx_target` (`target_type`, `target_id`)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '人工复审任务表';
+
+-- ---------------------------------------------------------------------
+-- 4. 种子违规词（最小示例，供 AC 自动机 E2E 验证）
+--    id 用固定 snowflake 风格值避免与运行时增量冲突
+-- ---------------------------------------------------------------------
+INSERT IGNORE INTO `violation_word` (`id`, `word`, `category`, `level`, `hit_count`, `status`) VALUES
+    (900000000000000001, '违禁品',   5, 3, 0, 1),
+    (900000000000000002, '色情低俗', 1, 2, 0, 1),
+    (900000000000000003, '暴力恐怖', 2, 3, 0, 1),
+    (900000000000000004, '虚假宣传', 4, 2, 0, 1),
+    (900000000000000005, '赌博',      5, 3, 0, 1),
+    (900000000000000006, '管制刀具',  5, 3, 0, 1);

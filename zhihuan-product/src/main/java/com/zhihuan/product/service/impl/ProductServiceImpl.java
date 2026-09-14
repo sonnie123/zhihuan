@@ -11,6 +11,9 @@ import com.zhihuan.common.exception.BizException;
 import com.zhihuan.common.result.ResultCode;
 import com.zhihuan.product.api.vo.OnSaleProductVO;
 import com.zhihuan.product.api.vo.ProductSkuVO;
+import com.zhihuan.audit.api.AuditDubboService;
+import com.zhihuan.audit.api.dto.AuditRequestDTO;
+import com.zhihuan.audit.api.dto.AuditResultDTO;
 import com.zhihuan.product.common.ProductStatus;
 import com.zhihuan.product.dto.ProductQueryDTO;
 import com.zhihuan.product.dto.ProductSaveDTO;
@@ -65,6 +68,9 @@ public class ProductServiceImpl implements ProductService {
 
     @DubboReference(check = false)
     private UserDubboService userDubboService;
+
+    @DubboReference(check = false)
+    private AuditDubboService auditDubboService;
 
     @Autowired
     private ApplicationEventPublisher eventPublisher;
@@ -167,6 +173,22 @@ public class ProductServiceImpl implements ProductService {
         }
         ProductMain update = new ProductMain();
         update.setId(productId);
+        // 规则快路径：提交审核时同步调 audit 违规词预审，命中违规直接置违规
+        AuditRequestDTO req = new AuditRequestDTO();
+        req.setTargetId(productId);
+        req.setTargetType(1);
+        req.setContent((product.getTitle() == null ? "" : product.getTitle())
+            + (product.getDescription() == null ? "" : product.getDescription()));
+        AuditResultDTO auditResult = auditDubboService.auditContent(req);
+        if (auditResult != null
+            && Objects.equals(auditResult.getResult(), AuditResultDTO.RESULT_REJECT)) {
+            update.setStatus(ProductStatus.ILLEGAL);
+            update.setAiAuditStatus(2);
+            productMainMapper.updateById(update);
+            detailCache.invalidate(productId);
+            throw new BizException(ResultCode.BIZ_ERROR,
+                "商品内容含违规词，无法上架：" + auditResult.getHitWords());
+        }
         update.setStatus(ProductStatus.AUDITING);
         productMainMapper.updateById(update);
     }
