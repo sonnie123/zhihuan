@@ -1,5 +1,5 @@
-﻿server:
-  port: 9022
+server:
+  port: 9021
 
 spring:
   application:
@@ -13,14 +13,14 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: {NACOS_SERVER:127.0.0.1}:8848
-        namespace: {NACOS_NAMESPACE:dev}
+        server-addr: ${NACOS_SERVER:127.0.0.1}:8848
+        namespace: ${NACOS_NAMESPACE:public}
         group: DEFAULT_GROUP
         username: nacos
         password: nacos
       config:
-        server-addr: {NACOS_SERVER:127.0.0.1}:8848
-        namespace: {NACOS_NAMESPACE:dev}
+        server-addr: ${NACOS_SERVER:127.0.0.1}:8848
+        namespace: ${NACOS_NAMESPACE:public}
         group: DEFAULT_GROUP
         file-extension: yaml
         refresh-enabled: true
@@ -29,14 +29,38 @@ dubbo:
   application:
     name: zhihuan-job
     qos-enable: false
+  scan:
+    base-packages: com.zhihuan
   protocol:
     name: tri
-    port: 9022
+    port: 20885
   registry:
-    address: nacos://{NACOS_SERVER:127.0.0.1}:8848?namespace={NACOS_NAMESPACE:dev}
+    address: nacos://${NACOS_SERVER:127.0.0.1}:8848?namespace=${NACOS_NAMESPACE:public}
+    # 只做接口级注册：避免应用级(instance)注册把 Dubbo 端口注册成同名 Nacos 服务，
+    # 污染 Spring Cloud 服务发现 → 网关 LB 随机命中 Dubbo 端口导致随机 404/500
+    register-mode: interface
   consumer:
     check: false
     timeout: 10000
+
+# XXL-JOB 执行器
+xxl:
+  job:
+    admin:
+      addresses: ${XXL_JOB_ADMIN:http://127.0.0.1:8088/xxl-job-admin}
+    accessToken: default_token
+    executor:
+      appname: zhihuan-job
+      address:
+      ip:
+      port: 9099
+      logpath: ./logs/xxl-job/jobhandler
+      logretentiondays: 30
+
+# job 当前任务(订单超时取消)只经 Dubbo 调 trade，不用 Redis；关闭 Redisson 避免依赖本地不稳定 Redis 阻塞启动
+zhihuan:
+  redis:
+    redisson: false
 
 logging:
   level:

@@ -11,6 +11,10 @@
     <dependencies>
         <dependency>
             <groupId>com.zhihuan</groupId>
+            <artifactId>zhihuan-trade-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.zhihuan</groupId>
             <artifactId>zhihuan-common-core</artifactId>
         </dependency>
         <dependency>

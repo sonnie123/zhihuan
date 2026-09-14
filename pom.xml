@@ -300,6 +300,11 @@
                 <artifactId>zhihuan-audit-api</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.zhihuan</groupId>
+                <artifactId>zhihuan-trade-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -350,6 +355,7 @@
         <module>zhihuan-user-api</module>
         <module>zhihuan-product-api</module>
         <module>zhihuan-audit-api</module>
+        <module>zhihuan-trade-api</module>
         <module>zhihuan-gateway</module>
         <module>zhihuan-user</module>
         <module>zhihuan-product</module>
