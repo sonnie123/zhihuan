@@ -70,6 +70,9 @@ dubbo:
     port: 20882
   registry:
     address: nacos://${NACOS_SERVER:127.0.0.1}:8848?namespace=${NACOS_NAMESPACE:public}
+    # 只做接口级注册：避免应用级(instance)注册把 Dubbo 端口注册成同名 Nacos 服务，
+    # 污染 Spring Cloud 服务发现 → 网关 LB 随机命中 Dubbo 端口导致随机 404/500
+    register-mode: interface
   consumer:
     check: false
     timeout: 10000

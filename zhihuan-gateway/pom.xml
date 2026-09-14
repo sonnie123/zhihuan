@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0">
     <modelVersion>4.0.0</modelVersion>
     <parent>
@@ -10,26 +10,6 @@
     <name>zhihuan-gateway</name>
     <dependencies>
         <dependency>
-            <groupId>com.zhihuan</groupId>
-            <artifactId>zhihuan-common-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.zhihuan</groupId>
-            <artifactId>zhihuan-common-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.zhihuan</groupId>
-            <artifactId>zhihuan-common-dubbo</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.zhihuan</groupId>
-            <artifactId>zhihuan-common-mybatis</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.zhihuan</groupId>
-            <artifactId>zhihuan-common-redis</artifactId>
-        </dependency>
-        <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
         </dependency>
@@ -37,13 +17,15 @@
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
         </dependency>
+        <!-- Spring Cloud Gateway 基于 WebFlux，禁止引入 spring-mvc/servlet 栈依赖 -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-gateway</artifactId>
         </dependency>
+        <!-- lb:// 服务名负载均衡（nacos discovery + loadbalancer） -->
         <dependency>
-            <groupId>com.alibaba.cloud</groupId>
-            <artifactId>spring-cloud-starter-alibaba-sentinel</artifactId>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-loadbalancer</artifactId>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>

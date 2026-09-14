@@ -1,4 +1,4 @@
-﻿server:
+server:
   port: 9000
 
 spring:
@@ -6,6 +6,9 @@ spring:
     name: zhihuan-gateway
   profiles:
     active: dev
+  main:
+    # 强制响应式栈（Gateway 基于 WebFlux，防止 servlet 依赖混入导致启动失败）
+    web-application-type: reactive
   config:
     import:
       - optional:nacos:application.yml
@@ -13,30 +16,69 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: {NACOS_SERVER:127.0.0.1}:8848
-        namespace: {NACOS_NAMESPACE:dev}
+        server-addr: ${NACOS_SERVER:127.0.0.1}:8848
+        namespace: ${NACOS_NAMESPACE:public}
         group: DEFAULT_GROUP
         username: nacos
         password: nacos
       config:
-        server-addr: {NACOS_SERVER:127.0.0.1}:8848
-        namespace: {NACOS_NAMESPACE:dev}
+        server-addr: ${NACOS_SERVER:127.0.0.1}:8848
+        namespace: ${NACOS_NAMESPACE:public}
         group: DEFAULT_GROUP
         file-extension: yaml
         refresh-enabled: true
-
-dubbo:
-  application:
-    name: zhihuan-gateway
-    qos-enable: false
-  protocol:
-    name: tri
-    port: 9000
-  registry:
-    address: nacos://{NACOS_SERVER:127.0.0.1}:8848?namespace={NACOS_NAMESPACE:dev}
-  consumer:
-    check: false
-    timeout: 10000
+    gateway:
+      server:
+        webflux:
+          # Spring Cloud 2025 迁移：路由必须挂在 gateway.server.webflux 下，
+          # 旧 spring.cloud.gateway.routes 会与新 key 并存产生双 HandlerMapping 竞争（随机 404）
+          # 路由设计：portal 走 /api 前缀，直连模式无前缀；均按服务前缀分流
+          routes:
+            # ---------- 带 /api 前缀（RewritePath 去前缀） ----------
+            - id: api-user
+              uri: lb://zhihuan-user
+              predicates:
+                - Path=/api/user/**,/api/auth/**,/api/address/**,/api/follow/**
+              filters:
+                - RewritePath=/api/(?<segment>.*), /$\{segment}
+              order: 0
+            - id: api-product
+              uri: lb://zhihuan-product
+              predicates:
+                - Path=/api/product/**,/api/category/**
+              filters:
+                - RewritePath=/api/(?<segment>.*), /$\{segment}
+              order: 0
+            - id: api-trade
+              uri: lb://zhihuan-trade
+              predicates:
+                - Path=/api/order/**,/api/account/**,/api/refund/**
+              filters:
+                - RewritePath=/api/(?<segment>.*), /$\{segment}
+              order: 0
+            # ---------- 直连（无前缀） ----------
+            - id: user-service
+              uri: lb://zhihuan-user
+              predicates:
+                - Path=/user/**,/auth/**,/address/**,/follow/**
+              order: 10
+            - id: product-service
+              uri: lb://zhihuan-product
+              predicates:
+                - Path=/product/**,/category/**
+              order: 10
+            - id: trade-service
+              uri: lb://zhihuan-trade
+              predicates:
+                - Path=/order/**,/account/**,/refund/**
+              order: 10
+          globalcors:
+            cors-configurations:
+              '[/**]':
+                allowedOriginPatterns: "*"
+                allowedMethods: "*"
+                allowedHeaders: "*"
+                allowCredentials: true
 
 logging:
   level:
