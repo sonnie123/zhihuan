@@ -43,12 +43,21 @@ kafka:
         compression.type: lz4
         linger.ms: 10
         batch.size: 16384
+    consumer:
+      enable-auto-commit: true
+      auto-offset-reset: latest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
 
 zhihuan:
   redis:
     redisson: true
   kafka:
     product-events-topic: product-events
+    ai-audit-events-topic: ai-audit-events
+    ai-audit-group: product-ai-audit-group
+    order-events-topic: order-events
+    order-group: product-order-group
 
 dubbo:
   application:
