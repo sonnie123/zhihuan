@@ -1,0 +1,45 @@
+﻿server:
+  port: 9021
+
+spring:
+  application:
+    name: zhihuan-notification
+  profiles:
+    active: dev
+  config:
+    import:
+      - optional:nacos:application.yml
+      - optional:nacos:zhihuan-notification.yml
+  cloud:
+    nacos:
+      discovery:
+        server-addr: {NACOS_SERVER:127.0.0.1}:8848
+        namespace: {NACOS_NAMESPACE:dev}
+        group: DEFAULT_GROUP
+        username: nacos
+        password: nacos
+      config:
+        server-addr: {NACOS_SERVER:127.0.0.1}:8848
+        namespace: {NACOS_NAMESPACE:dev}
+        group: DEFAULT_GROUP
+        file-extension: yaml
+        refresh-enabled: true
+
+dubbo:
+  application:
+    name: zhihuan-notification
+    qos-enable: false
+  protocol:
+    name: tri
+    port: 9021
+  registry:
+    address: nacos://{NACOS_SERVER:127.0.0.1}:8848?namespace={NACOS_NAMESPACE:dev}
+  consumer:
+    check: false
+    timeout: 10000
+
+logging:
+  level:
+    com.zhihuan: debug
+  pattern:
+    level: "%5p [%X{traceId:-}]"

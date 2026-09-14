@@ -1,0 +1,109 @@
+/* === 智焕关键帧动画库 === */
+
+@keyframes zh-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes zh-fade-up {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes zh-fade-down {
+  from { opacity: 0; transform: translateY(-12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes zh-scale-in {
+  from { opacity: 0; transform: scale(0.94); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes zh-slide-in-right {
+  from { opacity: 0; transform: translateX(20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes zh-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+@keyframes zh-pulse-ring {
+  0% { transform: scale(0.8); opacity: 1; }
+  100% { transform: scale(2); opacity: 0; }
+}
+
+@keyframes zh-breathe {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.08); opacity: 0.85; }
+}
+
+@keyframes zh-spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes zh-shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes zh-aurora {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@keyframes zh-scan-line {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+@keyframes zh-typing-cursor {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+@keyframes zh-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+@keyframes zh-confetti {
+  0% { transform: translateY(0) rotate(0); opacity: 1; }
+  100% { transform: translateY(120vh) rotate(720deg); opacity: 0; }
+}
+
+@keyframes zh-progress-stripe {
+  0% { background-position: 0 0; }
+  100% { background-position: 40px 0; }
+}
+
+@keyframes zh-orbit {
+  from { transform: rotate(0deg) translateX(var(--orbit-r, 140px)) rotate(0deg); }
+  to { transform: rotate(360deg) translateX(var(--orbit-r, 140px)) rotate(-360deg); }
+}
+
+.zh-anim-fade-in { animation: zh-fade-in var(--zh-duration-slow) var(--zh-easing-standard) both; }
+.zh-anim-fade-up { animation: zh-fade-up var(--zh-duration-slow) var(--zh-easing-decelerate) both; }
+.zh-anim-fade-down { animation: zh-fade-down var(--zh-duration-slow) var(--zh-easing-decelerate) both; }
+.zh-anim-scale-in { animation: zh-scale-in var(--zh-duration-slow) var(--zh-easing-spring) both; }
+.zh-anim-breathe { animation: zh-breathe 2.4s ease-in-out infinite; }
+.zh-anim-float { animation: zh-float 3s ease-in-out infinite; }
+.zh-anim-spin { animation: zh-spin 1s linear infinite; }
+.zh-anim-aurora {
+  background-size: 200% 200%;
+  animation: zh-aurora 6s ease infinite;
+}
+
+.zh-skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--zh-color-border-light) 0%,
+    rgba(228, 228, 231, 0.4) 50%,
+    var(--zh-color-border-light) 100%
+  );
+  background-size: 200% 100%;
+  animation: zh-shimmer 1.6s ease-in-out infinite;
+  border-radius: var(--zh-radius-base);
+}

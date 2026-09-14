@@ -1,0 +1,53 @@
+server:
+  port: 9011
+
+spring:
+  application:
+    name: zhihuan-user
+  profiles:
+    active: dev
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/zhihuan_user?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai
+    username: zhihuan
+    password: zhihuan
+    type: com.alibaba.druid.pool.DruidDataSource
+  config:
+    import:
+      - optional:nacos:application.yml
+      - optional:nacos:zhihuan-user.yml
+  cloud:
+    nacos:
+      discovery:
+        server-addr: ${NACOS_SERVER:127.0.0.1}:8848
+        namespace: ${NACOS_NAMESPACE:public}
+        group: DEFAULT_GROUP
+        username: nacos
+        password: nacos
+      config:
+        server-addr: ${NACOS_SERVER:127.0.0.1}:8848
+        namespace: ${NACOS_NAMESPACE:public}
+        group: DEFAULT_GROUP
+        file-extension: yaml
+        refresh-enabled: true
+
+dubbo:
+  application:
+    name: zhihuan-user
+    qos-enable: false
+  scan:
+    base-packages: com.zhihuan
+  protocol:
+    name: tri
+    port: 20881
+  registry:
+    address: nacos://${NACOS_SERVER:127.0.0.1}:8848?namespace=${NACOS_NAMESPACE:public}
+  consumer:
+    check: false
+    timeout: 10000
+
+logging:
+  level:
+    com.zhihuan: debug
+  pattern:
+    level: "%5p [%X{traceId:-}]"

@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.zhihuan</groupId>
+        <artifactId>zhihuan-parent</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+    <artifactId>zhihuan-common</artifactId>
+    <packaging>pom</packaging>
+    <name>zhihuan-common</name>
+    <modules>
+        <module>zhihuan-common-core</module>
+        <module>zhihuan-common-dubbo</module>
+        <module>zhihuan-common-mybatis</module>
+        <module>zhihuan-common-redis</module>
+        <module>zhihuan-common-web</module>
+    </modules>
+</project>
