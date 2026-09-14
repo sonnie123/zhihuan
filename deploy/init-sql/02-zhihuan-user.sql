@@ -30,6 +30,8 @@ CREATE TABLE IF NOT EXISTS `user_main` (
     `register_time`   DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '注册时间',
     `last_login_time` DATETIME     DEFAULT NULL COMMENT '最近登录时间',
     `version`         INT          NOT NULL DEFAULT 0 COMMENT '乐观锁版本号',
+    `create_time`     DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `update_time`     DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     PRIMARY KEY (`id`),
     KEY `idx_phone` (`phone`),
     KEY `idx_register_time` (`register_time`),

@@ -5,6 +5,7 @@ import com.zhihuan.common.result.ResultCode;
 import lombok.RequiredArgsConstructor;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.TimeUnit;
@@ -12,6 +13,7 @@ import java.util.function.Supplier;
 
 /**
  * 分布式锁服务（基于 Redisson）。
+ * 与 RedissonConfig 同条件装配：本地无 Redis 时可设置 zhihuan.redis.redisson=false 关闭。
  * 使用示例：
  * <pre>
  * boolean ok = lockService.tryLock("order:create:" + userId, 3, 10);
@@ -21,6 +23,7 @@ import java.util.function.Supplier;
  */
 @Service
 @RequiredArgsConstructor
+@ConditionalOnProperty(prefix = "zhihuan.redis", name = "redisson", havingValue = "true", matchIfMissing = true)
 public class RedisLockService {
 
     private final RedissonClient redissonClient;

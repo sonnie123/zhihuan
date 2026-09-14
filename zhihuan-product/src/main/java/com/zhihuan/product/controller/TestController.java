@@ -1,7 +1,7 @@
 package com.zhihuan.product.controller;
 
 import com.zhihuan.common.result.Result;
-import com.zhihuan.user.api.HelloDubboService;
+import com.zhihuan.user.api.UserDubboService;
 import lombok.RequiredArgsConstructor;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,10 +18,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class TestController {
 
     @DubboReference
-    private HelloDubboService helloDubboService;
+    private UserDubboService userDubboService;
 
     @GetMapping("/dubbo")
-    public Result<String> dubbo(@RequestParam(defaultValue = "zhihuan") String name) {
-        return Result.success(helloDubboService.sayHello(name));
+    public Result<Boolean> dubbo(@RequestParam(defaultValue = "1") Long userId) {
+        return Result.success(userDubboService.isUserValid(userId));
     }
 }

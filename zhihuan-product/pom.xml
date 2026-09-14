@@ -12,16 +12,12 @@
         <!-- 临时验证：复用 user 服务的 Dubbo 接口定义（阶段 2 抽公共 api 模块后移除） -->
         <dependency>
             <groupId>com.zhihuan</groupId>
-            <artifactId>zhihuan-user</artifactId>
+            <artifactId>zhihuan-user-api</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>com.zhihuan</groupId>
             <artifactId>zhihuan-common-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.zhihuan</groupId>
-            <artifactId>zhihuan-common-web</artifactId>
         </dependency>
         <dependency>
             <groupId>com.zhihuan</groupId>

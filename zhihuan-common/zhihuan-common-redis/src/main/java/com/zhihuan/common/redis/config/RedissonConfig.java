@@ -4,6 +4,7 @@ import lombok.Data;
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
 import org.redisson.config.Config;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,8 +12,10 @@ import org.springframework.util.StringUtils;
 
 /**
  * Redisson 客户端配置，绑定 spring.data.redis.* 前缀（与 Spring Data Redis 共用一套配置）。
+ * 注：本地无 Redis 时可通过 zhihuan.redis.redisson=false 关闭，避免启动阻塞（默认开启）。
  */
 @Configuration
+@ConditionalOnProperty(prefix = "zhihuan.redis", name = "redisson", havingValue = "true", matchIfMissing = true)
 public class RedissonConfig {
 
     @Bean

@@ -31,6 +31,10 @@ spring:
         file-extension: yaml
         refresh-enabled: true
 
+zhihuan:
+  redis:
+    redisson: false
+
 dubbo:
   application:
     name: zhihuan-product

@@ -331,6 +331,7 @@
 
     <modules>
         <module>zhihuan-common</module>
+        <module>zhihuan-user-api</module>
         <module>zhihuan-gateway</module>
         <module>zhihuan-user</module>
         <module>zhihuan-product</module>
