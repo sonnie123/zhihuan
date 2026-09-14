@@ -31,9 +31,24 @@ spring:
         file-extension: yaml
         refresh-enabled: true
 
+kafka:
+    bootstrap-servers: ${KAFKA_SERVER:127.0.0.1}:9092
+    producer:
+      acks: all
+      retries: 3
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      properties:
+        enable.idempotence: true
+        compression.type: lz4
+        linger.ms: 10
+        batch.size: 16384
+
 zhihuan:
   redis:
-    redisson: false
+    redisson: true
+  kafka:
+    product-events-topic: product-events
 
 dubbo:
   application:

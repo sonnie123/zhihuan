@@ -42,7 +42,7 @@ sa-token:
 
 zhihuan:
   redis:
-    redisson: false
+    redisson: true
 
 dubbo:
   application:

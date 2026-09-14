@@ -244,6 +244,12 @@
                 <artifactId>sa-token-spring-boot3-starter</artifactId>
                 <version>${satoken.version}</version>
             </dependency>
+            <!-- Sa-Token 集成 Redis 会话（微服务共享登录态） -->
+            <dependency>
+                <groupId>cn.dev33</groupId>
+                <artifactId>sa-token-redis-jackson</artifactId>
+                <version>${satoken.version}</version>
+            </dependency>
 
             <!-- Knife4j -->
             <dependency>
@@ -282,6 +288,11 @@
             <dependency>
                 <groupId>com.zhihuan</groupId>
                 <artifactId>zhihuan-common-web</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.zhihuan</groupId>
+                <artifactId>zhihuan-product-api</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>
@@ -332,6 +343,7 @@
     <modules>
         <module>zhihuan-common</module>
         <module>zhihuan-user-api</module>
+        <module>zhihuan-product-api</module>
         <module>zhihuan-gateway</module>
         <module>zhihuan-user</module>
         <module>zhihuan-product</module>
