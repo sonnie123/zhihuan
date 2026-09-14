@@ -1,4 +1,4 @@
-﻿server:
+server:
   port: 9014
 
 spring:
@@ -6,6 +6,12 @@ spring:
     name: zhihuan-trade
   profiles:
     active: dev
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/zhihuan_trade?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai
+    username: zhihuan
+    password: zhihuan
+    type: com.alibaba.druid.pool.DruidDataSource
   config:
     import:
       - optional:nacos:application.yml
@@ -13,27 +19,64 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: {NACOS_SERVER:127.0.0.1}:8848
-        namespace: {NACOS_NAMESPACE:dev}
+        server-addr: ${NACOS_SERVER:127.0.0.1}:8848
+        namespace: ${NACOS_NAMESPACE:public}
         group: DEFAULT_GROUP
         username: nacos
         password: nacos
       config:
-        server-addr: {NACOS_SERVER:127.0.0.1}:8848
-        namespace: {NACOS_NAMESPACE:dev}
+        server-addr: ${NACOS_SERVER:127.0.0.1}:8848
+        namespace: ${NACOS_NAMESPACE:public}
         group: DEFAULT_GROUP
         file-extension: yaml
         refresh-enabled: true
+
+# Seata 分布式事务（AT 模式，file 配置 + file 注册直连本地 Server）
+seata:
+  enabled: true
+  application-id: ${spring.application.name}
+  tx-service-group: zhihuan-trade-group
+  service:
+    vgroup-mapping:
+      zhihuan-trade-group: default
+    grouplist:
+      default: 127.0.0.1:8091
+  registry:
+    type: file
+  config:
+    type: file
+
+kafka:
+  bootstrap-servers: ${KAFKA_SERVER:127.0.0.1}:9092
+  producer:
+    acks: all
+    retries: 3
+    key-serializer: org.apache.kafka.common.serialization.StringSerializer
+    value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    properties:
+      enable.idempotence: true
+      compression.type: lz4
+      linger.ms: 10
+      batch.size: 16384
+
+zhihuan:
+  redis:
+    redisson: true
+  kafka:
+    order-events-topic: order-events
+    message-send-topic: order-events
 
 dubbo:
   application:
     name: zhihuan-trade
     qos-enable: false
+  scan:
+    base-packages: com.zhihuan
   protocol:
     name: tri
-    port: 9014
+    port: 20883
   registry:
-    address: nacos://{NACOS_SERVER:127.0.0.1}:8848?namespace={NACOS_NAMESPACE:dev}
+    address: nacos://${NACOS_SERVER:127.0.0.1}:8848?namespace=${NACOS_NAMESPACE:public}
   consumer:
     check: false
     timeout: 10000

@@ -24,6 +24,7 @@ CREATE TABLE IF NOT EXISTS `order_main` (
     `product_title`    VARCHAR(128)  NOT NULL COMMENT '商品快照标题',
     `product_image`    VARCHAR(255)  DEFAULT NULL COMMENT '商品快照图片',
     `product_price`    DECIMAL(10, 2) NOT NULL COMMENT '商品快照价格',
+    `buyer_count`      INT           NOT NULL DEFAULT 1 COMMENT '购买数量',
     `shipping_fee`     DECIMAL(10, 2) NOT NULL DEFAULT 0.00 COMMENT '运费',
     `total_amount`     DECIMAL(10, 2) NOT NULL COMMENT '总金额',
     `pay_amount`       DECIMAL(10, 2) NOT NULL COMMENT '实付金额',
@@ -184,3 +185,18 @@ CREATE TABLE IF NOT EXISTS `order_review` (
     KEY `idx_product_id` (`product_id`),
     KEY `idx_seller_id` (`seller_id`)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '订单评价表';
+
+-- =====================================================================
+-- Seata AT 事务模式 undo_log 表（分布式事务回滚日志，Seata 必需）
+-- =====================================================================
+CREATE TABLE IF NOT EXISTS `undo_log`
+(
+    `branch_id`     BIGINT       NOT NULL COMMENT '分支事务ID',
+    `xid`           VARCHAR(128) NOT NULL COMMENT '全局事务ID',
+    `context`       VARCHAR(128) NOT NULL COMMENT 'undo_log 上下文，如序列化方式',
+    `rollback_info` LONGBLOB     NOT NULL COMMENT '回滚信息',
+    `log_status`    INT          NOT NULL COMMENT '0 正常状态 1 防御状态',
+    `log_created`   DATETIME(6)  NOT NULL COMMENT '创建时间',
+    `log_modified`  DATETIME(6)  NOT NULL COMMENT '修改时间',
+    UNIQUE KEY `ux_undo_log` (`xid`, `branch_id`)
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = 'Seata AT 事务模式 undo 日志表';
